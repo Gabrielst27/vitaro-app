@@ -9,6 +9,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  bool _isLogin = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,20 +30,40 @@ class _AuthScreenState extends State<AuthScreen> {
               Card(
                 margin: EdgeInsets.all(24),
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: EdgeInsets.only(
+                    left: 24,
+                    top: 24,
+                    right: 24,
+                    bottom: 32,
+                  ),
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(16),
                         child: Text(
-                          'Bem-vindo de volta!',
+                          _isLogin ? 'Bem-vindo de volta!' : 'Crie sua conta',
                           style: Theme.of(context).textTheme.titleSmall,
                           textAlign: TextAlign.center,
                         ),
                       ),
                       const SizedBox(height: 16),
                       SingleChildScrollView(
-                        child: AuthForm(),
+                        child: AuthForm(
+                          isLogin: _isLogin,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                          });
+                        },
+                        child: Text(
+                          _isLogin
+                              ? 'Ainda não tenho conta'
+                              : 'Já tenho uma conta',
+                        ),
                       ),
                     ],
                   ),

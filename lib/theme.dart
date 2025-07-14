@@ -12,13 +12,11 @@ final darkTheme = ThemeData().copyWith(
   scaffoldBackgroundColor: darkColorScheme.surface,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      minimumSize: Size.fromHeight(50),
       backgroundColor: darkColorScheme.primary,
       foregroundColor: darkColorScheme.onPrimary,
     ),
   ),
-  // inputDecorationTheme: InputDecorationTheme().copyWith(
-  //   hintStyle: TextStyle(fontSize: 16),
-  // ),
   textTheme: TextTheme().copyWith(
     titleLarge: TextStyle(
       fontSize: 56,
