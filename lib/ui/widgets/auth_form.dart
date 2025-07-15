@@ -23,7 +23,7 @@ class _AuthFormState extends State<AuthForm> {
       child: Form(
         key: _formKey,
         child: Column(
-          spacing: 16,
+          spacing: 32,
           children: [
             if (!widget.isLogin)
               TextFormField(

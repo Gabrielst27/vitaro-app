@@ -24,13 +24,13 @@ final darkTheme = ThemeData().copyWith(
       fontWeight: FontWeight.bold,
     ),
     titleMedium: TextStyle(
-      fontSize: 40,
+      fontSize: 48,
       color: darkColorScheme.primary,
       fontWeight: FontWeight.bold,
     ),
     titleSmall: TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
+      fontSize: 40,
+      // fontWeight: FontWeight.bold,
     ),
     bodyLarge: TextStyle(
       fontSize: 16,
