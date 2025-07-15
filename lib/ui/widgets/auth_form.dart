@@ -11,6 +11,9 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
+  String _enteredEmail = '';
+  String _enteredName = '';
+  final _passwordController = TextEditingController();
 
   void _submit() {
     _formKey.currentState!.validate();
@@ -47,6 +50,7 @@ class _AuthFormState extends State<AuthForm> {
                   }
                   return null;
                 },
+                onSaved: (newValue) => _enteredName = newValue!,
               ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
@@ -71,8 +75,10 @@ class _AuthFormState extends State<AuthForm> {
                 }
                 return null;
               },
+              onSaved: (newValue) => _enteredEmail = newValue!,
             ),
             TextFormField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 hintText: 'Senha',
@@ -93,6 +99,26 @@ class _AuthFormState extends State<AuthForm> {
                 return null;
               },
             ),
+            if (!widget.isLogin)
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: 'Confirmar senha',
+                  prefixIcon: Icon(Icons.password),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                ),
+                validator: (value) {
+                  if (value != _passwordController.text) {
+                    return 'As senhas devem ser iguais';
+                  }
+                  return null;
+                },
+              ),
             ElevatedButton(
               onPressed: _submit,
               child: Text(widget.isLogin ? 'Entrar' : 'Criar conta'),

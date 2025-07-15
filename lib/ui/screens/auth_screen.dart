@@ -16,14 +16,15 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: Column(
-        spacing: _isLogin ? 128 : 64,
+        spacing: _isLogin ? 128 : 40,
         children: [
-          Center(
-            child: Text(
-              'VITARO',
-              style: Theme.of(context).textTheme.titleLarge,
+          if (_isLogin)
+            Center(
+              child: Text(
+                'VITARO',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
-          ),
           Expanded(
             child: Card(
               shape: RoundedRectangleBorder(
@@ -31,45 +32,52 @@ class _AuthScreenState extends State<AuthScreen> {
                   topLeft: Radius.circular(128),
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 24,
-                  top: 24,
-                  right: 24,
-                  bottom: 32,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        _isLogin ? 'Login' : 'Cadastro',
-                        style: Theme.of(context).textTheme.titleSmall,
-                        textAlign: TextAlign.center,
+              clipBehavior: Clip.hardEdge,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Text(
+                                  _isLogin ? 'Login' : 'Cadastro',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              AuthForm(
+                                isLogin: _isLogin,
+                              ),
+                              const SizedBox(height: 16),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _isLogin = !_isLogin;
+                                  });
+                                },
+                                child: Text(
+                                  _isLogin
+                                      ? 'Ainda não tenho conta'
+                                      : 'Já tenho uma conta',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    SingleChildScrollView(
-                      child: AuthForm(
-                        isLogin: _isLogin,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                      child: Text(
-                        _isLogin
-                            ? 'Ainda não tenho conta'
-                            : 'Já tenho uma conta',
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ),
