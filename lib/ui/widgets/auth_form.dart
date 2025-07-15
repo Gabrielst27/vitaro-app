@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
+import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
@@ -25,8 +26,9 @@ class _AuthFormState extends State<AuthForm> {
         final user = UserModel(
           name: _enteredName,
           email: _enteredEmail,
-          password: _passwordController.text,
+          password: _passwordController.text.trim(),
         );
+        UserSignupUsecase.execute(user);
       }
     }
   }
@@ -62,7 +64,7 @@ class _AuthFormState extends State<AuthForm> {
                   }
                   return null;
                 },
-                onSaved: (newValue) => _enteredName = newValue!,
+                onSaved: (newValue) => _enteredName = newValue!.trim(),
               ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
@@ -87,7 +89,7 @@ class _AuthFormState extends State<AuthForm> {
                 }
                 return null;
               },
-              onSaved: (newValue) => _enteredEmail = newValue!,
+              onSaved: (newValue) => _enteredEmail = newValue!.trim(),
             ),
             TextFormField(
               controller: _passwordController,
