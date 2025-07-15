@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitaro_app/domain/models/user_model.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
@@ -16,7 +17,18 @@ class _AuthFormState extends State<AuthForm> {
   final _passwordController = TextEditingController();
 
   void _submit() {
-    _formKey.currentState!.validate();
+    bool isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      _formKey.currentState!.save();
+      if (widget.isLogin) {
+      } else {
+        final user = UserModel(
+          name: _enteredName,
+          email: _enteredEmail,
+          password: _passwordController.text,
+        );
+      }
+    }
   }
 
   @override
@@ -101,7 +113,6 @@ class _AuthFormState extends State<AuthForm> {
             ),
             if (!widget.isLogin)
               TextFormField(
-                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Confirmar senha',
