@@ -8,6 +8,7 @@ class UserModel {
   final double? age;
   final double? height;
   final double? weight;
+  final String? token;
 
   UserModel({
     this.id,
@@ -17,6 +18,7 @@ class UserModel {
     this.age,
     this.height,
     this.weight,
+    this.token,
   });
 }
 

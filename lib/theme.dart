@@ -30,7 +30,6 @@ final darkTheme = ThemeData().copyWith(
     ),
     titleSmall: TextStyle(
       fontSize: 40,
-      // fontWeight: FontWeight.bold,
     ),
     bodyLarge: TextStyle(
       fontSize: 16,

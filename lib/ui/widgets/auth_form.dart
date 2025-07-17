@@ -4,8 +4,13 @@ import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
+  final void Function() onLoginSuccess;
 
-  const AuthForm({super.key, required this.isLogin});
+  const AuthForm({
+    super.key,
+    required this.isLogin,
+    required this.onLoginSuccess,
+  });
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -43,6 +48,10 @@ class _AuthFormState extends State<AuthForm> {
               SnackBar(content: Text('Erro: ${signUp.errorMessage}')),
             );
           }
+        } else {
+          setState(() {
+            widget.onLoginSuccess();
+          });
         }
       }
     }

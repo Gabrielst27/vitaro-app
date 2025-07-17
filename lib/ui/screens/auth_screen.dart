@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:vitaro_app/ui/widgets/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({super.key, required this.onLoginSuccess});
+
+  final void Function() onLoginSuccess;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -10,6 +12,10 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool _isLogin = true;
+
+  void _onLoginSuccess() {
+    widget.onLoginSuccess();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
           children: [
             if (_isLogin)
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Center(
                   child: Text(
                     'VITARO',
@@ -28,7 +34,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
             Expanded(
-              flex: 3,
+              flex: 5,
               child: Card(
                 margin: EdgeInsets.only(top: _isLogin ? 0 : 48),
                 shape: RoundedRectangleBorder(
@@ -63,6 +69,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 const SizedBox(height: 16),
                                 AuthForm(
                                   isLogin: _isLogin,
+                                  onLoginSuccess: _onLoginSuccess,
                                 ),
                                 const SizedBox(height: 16),
                                 TextButton(
