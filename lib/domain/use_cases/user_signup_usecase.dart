@@ -1,0 +1,20 @@
+import 'package:vitaro_app/data/api/user_api_service.dart';
+import 'package:vitaro_app/domain/models/result_dto.dart';
+import 'package:vitaro_app/domain/models/user_model.dart';
+
+final userApiService = UserApiService();
+
+class UserSignupUsecase {
+  static Future<Result<UserModel>> execute(UserModel user) async {
+    final result = await userApiService.signUp(user);
+    if (!result.isSuccess) {
+      return Result.failure(result.errorMessage);
+    }
+    final model = UserModel(
+      id: result.data!.id,
+      name: result.data!.name,
+      email: result.data!.email,
+    );
+    return Result.success(model);
+  }
+}

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vitaro_app/ui/screens/auth_screen.dart';
 import 'package:vitaro_app/theme.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 

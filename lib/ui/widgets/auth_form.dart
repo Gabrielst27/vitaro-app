@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
+import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
@@ -12,11 +13,15 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
   String _enteredEmail = '';
   String _enteredName = '';
-  final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
-  void _submit() {
+  void _submit() async {
+    setState(() {
+      _isLoading = true;
+    });
     bool isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
@@ -25,8 +30,20 @@ class _AuthFormState extends State<AuthForm> {
         final user = UserModel(
           name: _enteredName,
           email: _enteredEmail,
-          password: _passwordController.text,
+          password: _passwordController.text.trim(),
         );
+        final signUp = await UserSignupUsecase.execute(user);
+        setState(() {
+          _isLoading = false;
+        });
+        if (!signUp.isSuccess) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Erro: ${signUp.errorMessage}')),
+            );
+          }
+        }
       }
     }
   }
@@ -42,6 +59,7 @@ class _AuthFormState extends State<AuthForm> {
           children: [
             if (!widget.isLogin)
               TextFormField(
+                enabled: !_isLoading,
                 keyboardType: TextInputType.name,
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
@@ -62,9 +80,10 @@ class _AuthFormState extends State<AuthForm> {
                   }
                   return null;
                 },
-                onSaved: (newValue) => _enteredName = newValue!,
+                onSaved: (newValue) => _enteredName = newValue!.trim(),
               ),
             TextFormField(
+              enabled: !_isLoading,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: 'E-mail',
@@ -87,9 +106,10 @@ class _AuthFormState extends State<AuthForm> {
                 }
                 return null;
               },
-              onSaved: (newValue) => _enteredEmail = newValue!,
+              onSaved: (newValue) => _enteredEmail = newValue!.trim(),
             ),
             TextFormField(
+              enabled: !_isLoading,
               controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
@@ -113,6 +133,7 @@ class _AuthFormState extends State<AuthForm> {
             ),
             if (!widget.isLogin)
               TextFormField(
+                enabled: !_isLoading,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Confirmar senha',
@@ -131,8 +152,12 @@ class _AuthFormState extends State<AuthForm> {
                 },
               ),
             ElevatedButton(
-              onPressed: _submit,
-              child: Text(widget.isLogin ? 'Entrar' : 'Criar conta'),
+              onPressed: _isLoading ? null : _submit,
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Text(widget.isLogin ? 'Entrar' : 'Criar conta'),
             ),
           ],
         ),
