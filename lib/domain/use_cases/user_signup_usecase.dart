@@ -5,6 +5,6 @@ final userApiService = UserApiService();
 
 class UserSignupUsecase {
   static Future<void> execute(UserModel user) async {
-    userApiService.signUp(user);
+    final result = await userApiService.signUp(user);
   }
 }
