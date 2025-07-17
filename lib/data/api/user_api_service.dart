@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:vitaro_app/data/api/dtos/authenticated_user_dto.dart';
-import 'package:vitaro_app/data/api/dtos/result_dto.dart';
+import 'package:vitaro_app/domain/models/result_dto.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
 import 'package:vitaro_app/env.dart';
 
