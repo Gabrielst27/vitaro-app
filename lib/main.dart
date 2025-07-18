@@ -17,20 +17,20 @@ class App extends StatelessWidget {
     return MaterialApp(
       darkTheme: darkTheme,
       themeMode: ThemeMode.dark,
-      home: const AuthOrHome(),
+      home: const InitApp(),
     );
   }
 }
 
-class AuthOrHome extends StatefulWidget {
-  const AuthOrHome({super.key});
+class InitApp extends StatefulWidget {
+  const InitApp({super.key});
 
   @override
-  State<AuthOrHome> createState() => _AuthOrHomeState();
+  State<InitApp> createState() => _InitAppState();
 }
 
-class _AuthOrHomeState extends State<AuthOrHome> {
-  bool? isAuthenticated;
+class _InitAppState extends State<InitApp> {
+  bool isAuthenticated = false;
 
   @override
   void initState() {
@@ -54,13 +54,7 @@ class _AuthOrHomeState extends State<AuthOrHome> {
 
   @override
   Widget build(BuildContext context) {
-    if (isAuthenticated == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    return isAuthenticated!
+    return isAuthenticated
         ? const HomeScreen()
         : AuthScreen(onLoginSuccess: onLoginSuccess);
   }
