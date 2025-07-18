@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
+import 'package:vitaro_app/domain/use_cases/user_signin_usecase.dart';
 import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
 
 class AuthForm extends StatefulWidget {
@@ -31,6 +32,25 @@ class _AuthFormState extends State<AuthForm> {
     if (isValid) {
       _formKey.currentState!.save();
       if (widget.isLogin) {
+        final signIn = await UserSigninUsecase.execute(
+          _enteredEmail,
+          _passwordController.text,
+        );
+        setState(() {
+          _isLoading = false;
+        });
+        if (!signIn.isSuccess) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Erro: ${signIn.errorMessage}')),
+            );
+          }
+        } else {
+          setState(() {
+            widget.onLoginSuccess();
+          });
+        }
       } else {
         final user = UserModel(
           name: _enteredName,
