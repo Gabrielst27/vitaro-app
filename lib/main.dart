@@ -52,10 +52,18 @@ class _InitAppState extends State<InitApp> {
     });
   }
 
+  void onLogOut() {
+    setState(() {
+      isAuthenticated = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return isAuthenticated
-        ? const HomeScreen()
+        ? HomeScreen(
+            onLogOut: onLogOut,
+          )
         : AuthScreen(onLoginSuccess: onLoginSuccess);
   }
 }

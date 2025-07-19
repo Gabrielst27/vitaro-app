@@ -34,7 +34,7 @@ class _AuthFormState extends State<AuthForm> {
       if (widget.isLogin) {
         final signIn = await UserSigninUsecase.execute(
           _enteredEmail,
-          _passwordController.text,
+          _passwordController.text.trim(),
         );
         setState(() {
           _isLoading = false;

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/use_cases/user_signout_usecase.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.onLogOut});
 
-  void _logOut() {
-    UserSignoutUsecase.execute();
+  final void Function() onLogOut;
+
+  void _logOut() async {
+    await UserSignoutUsecase.execute();
+    onLogOut();
   }
 
   @override

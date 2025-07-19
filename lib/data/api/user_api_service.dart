@@ -21,7 +21,7 @@ class UserApiService {
               'password': user.password,
             }),
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(const Duration(seconds: 20));
       if (response.statusCode >= 400) {
         final errorData = json.decode(response.body);
         final errorMessage = errorData['message'] ?? 'Erro desconhecido';
@@ -51,7 +51,7 @@ class UserApiService {
               'password': password,
             }),
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(const Duration(seconds: 20));
       if (response.statusCode >= 400) {
         final errorData = json.decode(response.body);
         final errorMessage = errorData['message'] ?? 'Erro desconhecido';
