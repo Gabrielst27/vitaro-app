@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vitaro_app/ui/screens/auth_screen.dart';
 import 'package:vitaro_app/theme.dart';
-import 'package:vitaro_app/ui/screens/home_screen.dart';
+import 'package:vitaro_app/ui/screens/tabs_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,7 +61,7 @@ class _InitAppState extends State<InitApp> {
   @override
   Widget build(BuildContext context) {
     return isAuthenticated
-        ? HomeScreen(
+        ? TabsScreen(
             onLogOut: onLogOut,
           )
         : AuthScreen(onLoginSuccess: onLoginSuccess);

@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:vitaro_app/domain/use_cases/user_signout_usecase.dart';
+import 'package:vitaro_app/ui/screens/home_screen.dart';
+import 'package:vitaro_app/ui/screens/perfil_screen.dart';
+import 'package:vitaro_app/ui/screens/workouts_screen.dart';
+
+class TabsScreen extends StatefulWidget {
+  final void Function() onLogOut;
+
+  const TabsScreen({super.key, required this.onLogOut});
+
+  @override
+  State<TabsScreen> createState() => _TabsScreenState();
+}
+
+class _TabsScreenState extends State<TabsScreen> {
+  int _currentIndex = 1;
+
+  void logOut() async {
+    await UserSignoutUsecase.execute();
+    widget.onLogOut();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget content = Center(
+      child: Text('Error: No content.'),
+    );
+    if (_currentIndex == 0) {
+      content = WorkoutsScreen();
+    }
+    if (_currentIndex == 1) {
+      content = HomeScreen();
+    }
+    if (_currentIndex == 2) {
+      content = PerfilScreen();
+    }
+    return DefaultTabController(
+      length: 3,
+      child: SafeArea(
+        child: Scaffold(
+          body: content,
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: _currentIndex,
+            destinations: [
+              NavigationDestination(
+                icon: Icon(Icons.fitness_center),
+                label: 'Treinos',
+              ),
+              NavigationDestination(icon: Icon(Icons.home), label: 'Início'),
+              NavigationDestination(icon: Icon(Icons.person), label: 'Perfil'),
+            ],
+            onDestinationSelected: (index) => setState(() {
+              _currentIndex = index;
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+}
