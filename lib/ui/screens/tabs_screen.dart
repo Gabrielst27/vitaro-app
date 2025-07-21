@@ -33,7 +33,9 @@ class _TabsScreenState extends State<TabsScreen> {
       content = HomeScreen();
     }
     if (_currentIndex == 2) {
-      content = PerfilScreen();
+      content = PerfilScreen(
+        onLogout: logOut,
+      );
     }
     return DefaultTabController(
       length: 3,

@@ -21,28 +21,31 @@ final darkTheme = ThemeData().copyWith(
       foregroundColor: darkColorScheme.onPrimary,
     ),
   ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(textStyle: const TextStyle(fontSize: 18)),
+  ),
   textTheme: TextTheme().copyWith(
     titleLarge: TextStyle(
-      fontSize: 56,
-      color: darkColorScheme.primary,
-      fontWeight: FontWeight.bold,
-    ),
-    titleMedium: TextStyle(
       fontSize: 48,
       color: darkColorScheme.primary,
       fontWeight: FontWeight.bold,
     ),
-    titleSmall: TextStyle(
+    titleMedium: TextStyle(
       fontSize: 40,
+      color: darkColorScheme.primary,
+      fontWeight: FontWeight.bold,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 32,
     ),
     bodyLarge: TextStyle(
-      fontSize: 16,
+      fontSize: 20,
     ),
     bodyMedium: TextStyle(
-      fontSize: 14,
+      fontSize: 18,
     ),
     bodySmall: TextStyle(
-      fontSize: 12,
+      fontSize: 16,
     ),
   ),
 );
