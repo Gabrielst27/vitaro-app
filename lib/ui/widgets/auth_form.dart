@@ -55,12 +55,13 @@ class _AuthFormState extends State<AuthForm> {
           });
         }
       } else {
+        final container = ProviderScope.containerOf(context);
         final user = UserModel(
           name: _enteredName,
           email: _enteredEmail,
           password: _passwordController.text.trim(),
         );
-        final signUp = await UserSignupUsecase.execute(user);
+        final signUp = await UserSignupUsecase.execute(container, user);
         setState(() {
           _isLoading = false;
         });
@@ -95,6 +96,10 @@ class _AuthFormState extends State<AuthForm> {
                 keyboardType: TextInputType.name,
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 12,
+                  ),
                   hintText: 'Nome',
                   prefixIcon: Icon(Icons.person),
                   border: OutlineInputBorder(

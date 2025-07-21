@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vitaro_app/domain/use_cases/user_signout_usecase.dart';
 import 'package:vitaro_app/ui/screens/home_screen.dart';
 import 'package:vitaro_app/ui/screens/perfil_screen.dart';
@@ -17,7 +18,8 @@ class _TabsScreenState extends State<TabsScreen> {
   int _currentIndex = 1;
 
   void logOut() async {
-    await UserSignoutUsecase.execute();
+    final container = ProviderScope.containerOf(context);
+    await UserSignoutUsecase.execute(container);
     widget.onLogOut();
   }
 
