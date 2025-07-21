@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vitaro_app/domain/providers/current_user_provider.dart';
 
-class PerfilScreen extends StatelessWidget {
+class PerfilScreen extends ConsumerWidget {
   const PerfilScreen({super.key, required this.onLogout});
 
   final void Function() onLogout;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -38,7 +40,7 @@ class PerfilScreen extends StatelessWidget {
           ),
           const SizedBox(height: 96),
           Text(
-            'Nome de usuário',
+            ref.watch(currentUserProvider).name,
             style: Theme.of(context).textTheme.titleSmall,
             textAlign: TextAlign.center,
           ),

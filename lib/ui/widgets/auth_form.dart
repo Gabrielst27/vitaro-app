@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
 import 'package:vitaro_app/domain/use_cases/user_signin_usecase.dart';
 import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
@@ -31,8 +32,10 @@ class _AuthFormState extends State<AuthForm> {
         _isLoading = true;
       });
       _formKey.currentState!.save();
+      final container = ProviderScope.containerOf(context);
       if (widget.isLogin) {
         final signIn = await UserSigninUsecase.execute(
+          container,
           _enteredEmail,
           _passwordController.text.trim(),
         );
