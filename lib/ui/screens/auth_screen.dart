@@ -51,7 +51,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           minHeight: constraints.maxHeight,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(24.0),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 24,
+                            horizontal: 32,
+                          ),
                           child: IntrinsicHeight(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
