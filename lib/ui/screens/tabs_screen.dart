@@ -1,21 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:vitaro_app/domain/models/user_model.dart';
+import 'package:vitaro_app/domain/providers/current_user_provider.dart';
+import 'package:vitaro_app/domain/use_cases/find_current_user_usecase.dart';
 import 'package:vitaro_app/domain/use_cases/user_signout_usecase.dart';
 import 'package:vitaro_app/ui/screens/home_screen.dart';
 import 'package:vitaro_app/ui/screens/perfil_screen.dart';
 import 'package:vitaro_app/ui/screens/workouts_screen.dart';
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends ConsumerStatefulWidget {
   final void Function() onLogOut;
 
   const TabsScreen({super.key, required this.onLogOut});
 
   @override
-  State<TabsScreen> createState() => _TabsScreenState();
+  ConsumerState<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends ConsumerState<TabsScreen> {
+  late UserModel _currentUser;
   int _currentIndex = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentUser = ref.read(currentUserProvider);
+    Future.microtask(() => _verifyCurrentUser());
+  }
+
+  void _verifyCurrentUser() async {
+    final storage = FlutterSecureStorage();
+    final accessToken = await storage.read(key: 'access_token');
+    if (_currentUser.token != accessToken && mounted) {
+      final container = ProviderScope.containerOf(context);
+      await FindCurrentUserUsecase.execute(container);
+      final token = ref.read(currentUserProvider).token;
+      if (token == null || token.isEmpty) {
+        widget.onLogOut();
+      }
+    }
+  }
 
   void logOut() async {
     final container = ProviderScope.containerOf(context);

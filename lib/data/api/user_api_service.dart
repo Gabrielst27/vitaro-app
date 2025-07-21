@@ -1,36 +1,35 @@
 import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart' as http;
+import 'package:vitaro_app/data/api/dio_client.dart';
 import 'package:vitaro_app/data/api/dtos/authenticated_user_dto.dart';
 import 'package:vitaro_app/domain/models/result_dto.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
 import 'package:vitaro_app/env.dart';
 
 final _firebaseAuth = FirebaseAuth.instance;
+final _dio = DioClient().client;
 
 class UserApiService {
   Future<Result<AuthenticatedUserDto>> signUp(UserModel user) async {
     try {
-      final response = await http
+      final response = await _dio
           .post(
-            Uri.parse('$vitaroApiUrl/users/sign-up'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, dynamic>{
+            '$vitaroApiUrl/users/sign-up',
+
+            data: jsonEncode(<String, dynamic>{
               'name': user.name,
               'email': user.email,
               'password': user.password,
             }),
           )
           .timeout(const Duration(seconds: 20));
-      if (response.statusCode >= 400) {
-        final errorData = json.decode(response.body);
+      if (response.statusCode! >= 400) {
+        final errorData = response.data;
         final errorMessage = errorData['message'] ?? 'Erro desconhecido';
         return Result.failure(errorMessage);
       }
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = response.data;
       final userDto = AuthenticatedUserMapper.toDto(data);
       final credentials = await _firebaseAuth.signInWithCustomToken(
         userDto.token,
@@ -56,23 +55,20 @@ class UserApiService {
         return Result.failure('Email ou senha incorretos');
       }
       final idToken = await credentials.user!.getIdToken();
-      final response = await http
+      final response = await _dio
           .post(
-            Uri.parse('$vitaroApiUrl/users/sign-in'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, dynamic>{
+            '$vitaroApiUrl/users/sign-in',
+            data: jsonEncode(<String, dynamic>{
               'idToken': idToken,
             }),
           )
           .timeout(const Duration(seconds: 20));
-      if (response.statusCode >= 400) {
-        final errorData = json.decode(response.body);
+      if (response.statusCode! >= 400) {
+        final errorData = response.data;
         final errorMessage = errorData['message'] ?? 'Erro desconhecido';
         return Result.failure(errorMessage);
       }
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = response.data;
       final userDto = AuthenticatedUserMapper.toDto({...data});
       userDto.updateToken(idToken!);
       return Result.success(userDto);
@@ -81,6 +77,26 @@ class UserApiService {
       return Result.failure(errorMessage);
     } catch (error) {
       return Result.failure('Erro ao conectar com o servidor: $error');
+    }
+  }
+
+  Future<Result<AuthenticatedUserDto>> findCurrentUser() async {
+    try {
+      final response = await _dio.get('$vitaroApiUrl/users/find-current-user');
+      if (response.statusCode! >= 400) {
+        return Result.failure(response.data);
+      }
+      final Map<String, dynamic> data = response.data;
+      final userDto = AuthenticatedUserMapper.toDto({...data});
+      return Result.success(userDto);
+    } catch (error) {
+      if (error is DioException) {
+        if (error.response!.data['error'] == "auth/id-token-expired") {
+          return Result.failure('Expired Token');
+        }
+        return Result.failure('Erro Dio: ${error.message}');
+      }
+      return Result.failure('Erro desconhecido: $error');
     }
   }
 
