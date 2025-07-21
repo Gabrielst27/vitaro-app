@@ -1,8 +1,8 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserSignoutUsecase {
   static Future<void> execute() async {
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.remove('access_token');
+    final storage = FlutterSecureStorage();
+    await storage.delete(key: 'access_token');
   }
 }

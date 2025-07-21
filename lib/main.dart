@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vitaro_app/ui/screens/auth_screen.dart';
 import 'package:vitaro_app/theme.dart';
 import 'package:vitaro_app/ui/screens/tabs_screen.dart';
@@ -42,11 +42,13 @@ class _InitAppState extends State<InitApp> {
   }
 
   Future<void> checkToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('access_token');
-    setState(() {
-      isAuthenticated = token != null && token.isNotEmpty;
-    });
+    final storage = FlutterSecureStorage();
+    final accessToken = await storage.read(key: 'access_token');
+    if (accessToken != null && accessToken.isNotEmpty) {
+      setState(() {
+        isAuthenticated = true;
+      });
+    }
   }
 
   void onLoginSuccess() {
