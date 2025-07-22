@@ -9,37 +9,34 @@ class WorkoutsScreen extends StatefulWidget {
 }
 
 class _WorkoutsScreenState extends State<WorkoutsScreen> {
-  String _sportFilter = 'Todos os esportes';
-
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          child: Column(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: Row(
             children: [
-              SizedBox(
-                height: constraints.maxHeight * 0.15,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownMenu(
-                      initialSelection: _sportFilter,
-                      dropdownMenuEntries: [
-                        DropdownMenuEntry(
-                          value: 'Todos os esportes',
-                          label: 'Todos os esportes',
-                        ),
-                      ],
-                    ),
-                  ],
+              IconButton(
+                icon: Icon(
+                  Icons.filter_list,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
               ),
-              WorkoutList(),
+              const SizedBox(width: 8),
+              Text(
+                'Filtros',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ],
           ),
-        );
-      },
+        ),
+        Expanded(child: WorkoutList()),
+      ],
     );
   }
 }

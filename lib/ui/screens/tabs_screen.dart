@@ -8,6 +8,7 @@ import 'package:vitaro_app/domain/use_cases/user_signout_usecase.dart';
 import 'package:vitaro_app/ui/screens/home_screen.dart';
 import 'package:vitaro_app/ui/screens/perfil_screen.dart';
 import 'package:vitaro_app/ui/screens/workouts_screen.dart';
+import 'package:vitaro_app/ui/widgets/drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -31,7 +32,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     final storage = FlutterSecureStorage();
     final accessToken = await storage.read(key: 'access_token');
     if (_currentUser.token != accessToken && mounted) {
-      print('ACIONOU');
       final container = ProviderScope.containerOf(context);
       await FindCurrentUserUsecase.execute(container);
     }
@@ -62,6 +62,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       length: 3,
       child: SafeArea(
         child: Scaffold(
+          drawer: CustomDrawer(),
           body: content,
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,

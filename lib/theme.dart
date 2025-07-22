@@ -24,6 +24,13 @@ final darkTheme = ThemeData().copyWith(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(textStyle: const TextStyle(fontSize: 14)),
   ),
+  dropdownMenuTheme: DropdownMenuThemeData(
+    textStyle: TextStyle(
+      fontSize: 14,
+      color: darkColorScheme.primary,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
   textTheme: TextTheme().copyWith(
     titleLarge: TextStyle(
       fontSize: 40,
