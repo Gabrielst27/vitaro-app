@@ -51,13 +51,13 @@ class PerfilScreen extends ConsumerWidget {
             onPressed: onLogout,
             icon: Icon(
               Icons.logout,
-              color: Theme.of(context).colorScheme.errorContainer,
+              color: Theme.of(context).colorScheme.error,
               size: 24,
             ),
             label: Text(
               'Sair',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.errorContainer,
+                color: Theme.of(context).colorScheme.error,
               ),
             ),
           ),

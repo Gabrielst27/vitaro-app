@@ -6,12 +6,10 @@ import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
-  final void Function() onLoginSuccess;
 
   const AuthForm({
     super.key,
     required this.isLogin,
-    required this.onLoginSuccess,
   });
 
   @override
@@ -39,9 +37,6 @@ class _AuthFormState extends State<AuthForm> {
           _enteredEmail,
           _passwordController.text.trim(),
         );
-        setState(() {
-          _isLoading = false;
-        });
         if (!signIn.isSuccess) {
           if (mounted) {
             ScaffoldMessenger.of(context).clearSnackBars();
@@ -49,10 +44,6 @@ class _AuthFormState extends State<AuthForm> {
               SnackBar(content: Text('Erro: ${signIn.errorMessage}')),
             );
           }
-        } else {
-          setState(() {
-            widget.onLoginSuccess();
-          });
         }
       } else {
         final container = ProviderScope.containerOf(context);
@@ -62,9 +53,6 @@ class _AuthFormState extends State<AuthForm> {
           password: _passwordController.text.trim(),
         );
         final signUp = await UserSignupUsecase.execute(container, user);
-        setState(() {
-          _isLoading = false;
-        });
         if (!signUp.isSuccess) {
           if (mounted) {
             ScaffoldMessenger.of(context).clearSnackBars();
@@ -72,10 +60,6 @@ class _AuthFormState extends State<AuthForm> {
               SnackBar(content: Text('Erro: ${signUp.errorMessage}')),
             );
           }
-        } else {
-          setState(() {
-            widget.onLoginSuccess();
-          });
         }
       }
     }

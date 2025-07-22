@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vitaro_app/data/api/user_api_service.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
 import 'package:vitaro_app/domain/providers/current_user_provider.dart';
@@ -10,10 +11,8 @@ class FindCurrentUserUsecase {
   static Future<void> execute(ProviderContainer container) async {
     final result = await userApiService.findCurrentUser();
     if (!result.isSuccess) {
-      if (result.errorMessage == "Expired Token") {
-        await UserSignoutUsecase.execute(container);
-      }
-      throw Exception('Usuário atual não encontrado');
+      print('ERRO: ${result.errorMessage}');
+      return await UserSignoutUsecase.execute(container);
     }
     final model = UserModel(
       id: result.data!.id,
@@ -24,6 +23,9 @@ class FindCurrentUserUsecase {
       weight: result.data!.weight,
       token: result.data!.token,
     );
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'access_token');
+    print('TOKEN: $token');
     container.read(currentUserProvider.notifier).login(model);
   }
 }

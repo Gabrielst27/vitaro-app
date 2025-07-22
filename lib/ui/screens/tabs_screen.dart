@@ -10,9 +10,7 @@ import 'package:vitaro_app/ui/screens/perfil_screen.dart';
 import 'package:vitaro_app/ui/screens/workouts_screen.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
-  final void Function() onLogOut;
-
-  const TabsScreen({super.key, required this.onLogOut});
+  const TabsScreen({super.key});
 
   @override
   ConsumerState<TabsScreen> createState() => _TabsScreenState();
@@ -33,19 +31,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     final storage = FlutterSecureStorage();
     final accessToken = await storage.read(key: 'access_token');
     if (_currentUser.token != accessToken && mounted) {
+      print('ACIONOU');
       final container = ProviderScope.containerOf(context);
       await FindCurrentUserUsecase.execute(container);
-      final token = ref.read(currentUserProvider).token;
-      if (token == null || token.isEmpty) {
-        widget.onLogOut();
-      }
     }
   }
 
   void logOut() async {
     final container = ProviderScope.containerOf(context);
     await UserSignoutUsecase.execute(container);
-    widget.onLogOut();
   }
 
   @override
