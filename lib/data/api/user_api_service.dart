@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vitaro_app/data/api/dio_client.dart';
 import 'package:vitaro_app/data/api/dtos/authenticated_user_dto.dart';
 import 'package:vitaro_app/domain/models/result_dto.dart';
@@ -42,7 +43,7 @@ class UserApiService {
     }
   }
 
-  Future<Result<AuthenticatedUserDto>> signIn(
+  Future<Result<void>> signIn(
     String email,
     String password,
   ) async {
@@ -55,23 +56,9 @@ class UserApiService {
         return Result.failure('Email ou senha incorretos');
       }
       final idToken = await credentials.user!.getIdToken();
-      final response = await _dio
-          .post(
-            '$vitaroApiUrl/users/sign-in',
-            data: jsonEncode(<String, dynamic>{
-              'idToken': idToken,
-            }),
-          )
-          .timeout(const Duration(seconds: 20));
-      if (response.statusCode! >= 400) {
-        final errorData = response.data;
-        final errorMessage = errorData['message'] ?? 'Erro desconhecido';
-        return Result.failure(errorMessage);
-      }
-      final Map<String, dynamic> data = response.data;
-      final userDto = AuthenticatedUserMapper.toDto({...data});
-      userDto.updateToken(idToken!);
-      return Result.success(userDto);
+      final storage = FlutterSecureStorage();
+      await storage.write(key: 'access_token', value: idToken);
+      return Result.success({});
     } on FirebaseAuthException catch (error) {
       final errorMessage = _firebaseAuthErrorMessage(error.code);
       return Result.failure(errorMessage);
@@ -82,7 +69,9 @@ class UserApiService {
 
   Future<Result<AuthenticatedUserDto>> findCurrentUser() async {
     try {
-      final response = await _dio.get('$vitaroApiUrl/users/find-current-user');
+      final response = await _dio
+          .get('$vitaroApiUrl/users/find-current-user')
+          .timeout(Duration(seconds: 12));
       if (response.statusCode! >= 400) {
         return Result.failure(response.data);
       }

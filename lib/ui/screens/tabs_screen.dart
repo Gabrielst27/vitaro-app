@@ -31,9 +31,14 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   void _verifyCurrentUser() async {
     final storage = FlutterSecureStorage();
     final accessToken = await storage.read(key: 'access_token');
-    if (_currentUser.token != accessToken && mounted) {
+    if (mounted) {
       final container = ProviderScope.containerOf(context);
-      await FindCurrentUserUsecase.execute(container);
+      if (accessToken == null) {
+        await UserSignoutUsecase.execute(container);
+      }
+      if (_currentUser.token != accessToken) {
+        await FindCurrentUserUsecase.execute(container);
+      }
     }
   }
 

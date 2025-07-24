@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vitaro_app/data/api/user_api_service.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
@@ -8,6 +9,11 @@ final userApiService = UserApiService();
 
 class FindCurrentUserUsecase {
   static Future<void> execute(ProviderContainer container) async {
+    final auth = FirebaseAuth.instance;
+    final currentUser = auth.currentUser;
+    if (currentUser == null) {
+      UserSignoutUsecase.execute(container);
+    }
     final result = await userApiService.findCurrentUser();
     if (!result.isSuccess) {
       return await UserSignoutUsecase.execute(container);
