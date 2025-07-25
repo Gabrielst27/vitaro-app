@@ -59,7 +59,7 @@ class UserApiService extends ChangeNotifier {
     } catch (error) {
       if (error is DioException) {
         if (error.response!.data['error'] == "auth/id-token-expired") {
-          return Result.failure('Expired Token');
+          return Result.failure('Token expirado');
         }
         return Result.failure('Erro Dio: ${error.message}');
       }

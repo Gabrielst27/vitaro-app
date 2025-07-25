@@ -16,10 +16,6 @@ class AuthenticatedUserDto {
     required this.weight,
     required this.token,
   });
-
-  void updateToken(String newToken) {
-    token = newToken;
-  }
 }
 
 class AuthenticatedUserMapper {

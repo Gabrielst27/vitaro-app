@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vitaro_app/data/api/auth_api_service.dart';
 import 'package:vitaro_app/data/api/user_api_service.dart';
 import 'package:vitaro_app/domain/models/result_dto.dart';
@@ -11,6 +10,7 @@ class AuthService extends ChangeNotifier {
   final UserApiService _userApi = UserApiService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? authUser;
+  UserModel? currentUser;
   bool isLoading = true;
 
   AuthService() {
@@ -18,8 +18,15 @@ class AuthService extends ChangeNotifier {
   }
 
   _authCheck() {
-    _auth.authStateChanges().listen((User? user) {
+    _auth.authStateChanges().listen((User? user) async {
       authUser = user;
+      if (user != null) {
+        try {
+          await _findCurrentUser();
+        } catch (error) {
+          debugPrint('ERRO ${error.toString()}');
+        }
+      }
       isLoading = false;
       notifyListeners();
     });
@@ -33,24 +40,41 @@ class AuthService extends ChangeNotifier {
     if (!result.isSuccess) {
       return Result.failure(result.errorMessage);
     }
-    final idToken = await _auth.currentUser!.getIdToken();
-    final storage = FlutterSecureStorage();
-    await storage.write(key: 'access_token', value: idToken);
     return Result.successEmpty();
   }
 
-  Future<Result<void>> signUp(
+  Future<void> signUp(
     UserModel user,
   ) async {
     final result = await _userApi.signUp(user);
     if (!result.isSuccess) {
-      return Result.failure(result.errorMessage);
+      throw Exception(result.errorMessage);
     }
     final credentials = await _auth.signInWithCustomToken(
       result.data!.token,
     );
     final idToken = await credentials.user!.getIdToken();
-    result.data!.updateToken(idToken!);
+    final model = UserModel(
+      id: result.data!.id,
+      name: result.data!.name,
+      email: result.data!.email,
+      age: result.data!.age,
+      height: result.data!.height,
+      weight: result.data!.weight,
+      token: idToken,
+    );
+    currentUser = model;
+    notifyListeners();
+  }
+
+  Future<void> _findCurrentUser() async {
+    if (_auth.currentUser == null) {
+      throw Exception('Usuário não autenticado nessa porra');
+    }
+    final result = await _userApi.findCurrentUser();
+    if (!result.isSuccess) {
+      throw Exception('Usuário não encontrado');
+    }
     final model = UserModel(
       id: result.data!.id,
       name: result.data!.name,
@@ -60,14 +84,12 @@ class AuthService extends ChangeNotifier {
       weight: result.data!.weight,
       token: result.data!.token,
     );
-    final storage = FlutterSecureStorage();
-    await storage.write(key: 'access_token', value: model.token);
-    return Result.successEmpty();
+    currentUser = model;
   }
 
   Future<void> signOut() async {
     await _auth.signOut();
-    final storage = FlutterSecureStorage();
-    await storage.delete(key: 'access_token');
+    currentUser = null;
+    notifyListeners();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
-import 'package:vitaro_app/domain/use_cases/auth_service.dart';
+import 'package:vitaro_app/domain/services/auth_service.dart';
 
 final AuthService _authService = AuthService();
 
@@ -52,12 +52,13 @@ class _AuthFormState extends State<AuthForm> {
           email: _enteredEmail,
           password: _passwordController.text.trim(),
         );
-        final signUp = await _authService.signUp(user);
-        if (!signUp.isSuccess) {
+        try {
+          await _authService.signUp(user);
+        } catch (error) {
           if (mounted) {
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erro: ${signUp.errorMessage}')),
+              SnackBar(content: Text('Erro: ${error.toString()}')),
             );
           }
           setState(() {

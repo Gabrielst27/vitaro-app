@@ -1,14 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vitaro_app/domain/models/user_model.dart';
 
 class PerfilScreen extends StatelessWidget {
-  const PerfilScreen({super.key, required this.onLogout});
+  const PerfilScreen({super.key, required this.onLogout, this.user});
 
+  final UserModel? user;
   final void Function() onLogout;
 
   @override
   Widget build(BuildContext context) {
-    final auth = FirebaseAuth.instance;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -40,7 +40,7 @@ class PerfilScreen extends StatelessWidget {
           ),
           const SizedBox(height: 96),
           Text(
-            auth.currentUser!.displayName!,
+            user != null ? user!.name : 'Loading',
             style: Theme.of(context).textTheme.titleSmall,
             textAlign: TextAlign.center,
           ),
