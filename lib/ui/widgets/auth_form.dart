@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
-import 'package:vitaro_app/domain/use_cases/user_signin_usecase.dart';
-import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
+import 'package:vitaro_app/domain/use_cases/auth_service.dart';
+
+final AuthService _authService = AuthService();
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
@@ -30,10 +30,8 @@ class _AuthFormState extends State<AuthForm> {
         _isLoading = true;
       });
       _formKey.currentState!.save();
-      final container = ProviderScope.containerOf(context);
       if (widget.isLogin) {
-        final signIn = await UserSigninUsecase.execute(
-          container,
+        final signIn = await _authService.signIn(
           _enteredEmail,
           _passwordController.text.trim(),
         );
@@ -41,18 +39,20 @@ class _AuthFormState extends State<AuthForm> {
           if (mounted) {
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erro: ${signIn.errorMessage}')),
+              SnackBar(content: Text('${signIn.errorMessage}')),
             );
           }
+          setState(() {
+            _isLoading = false;
+          });
         }
       } else {
-        final container = ProviderScope.containerOf(context);
         final user = UserModel(
           name: _enteredName,
           email: _enteredEmail,
           password: _passwordController.text.trim(),
         );
-        final signUp = await UserSignupUsecase.execute(container, user);
+        final signUp = await _authService.signUp(user);
         if (!signUp.isSuccess) {
           if (mounted) {
             ScaffoldMessenger.of(context).clearSnackBars();
@@ -60,6 +60,9 @@ class _AuthFormState extends State<AuthForm> {
               SnackBar(content: Text('Erro: ${signUp.errorMessage}')),
             );
           }
+          setState(() {
+            _isLoading = false;
+          });
         }
       }
     }

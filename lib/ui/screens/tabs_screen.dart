@@ -1,50 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:vitaro_app/domain/models/user_model.dart';
-import 'package:vitaro_app/domain/providers/current_user_provider.dart';
-import 'package:vitaro_app/domain/use_cases/find_current_user_usecase.dart';
-import 'package:vitaro_app/domain/use_cases/user_signout_usecase.dart';
+import 'package:vitaro_app/domain/use_cases/auth_service.dart';
 import 'package:vitaro_app/ui/screens/home_screen.dart';
 import 'package:vitaro_app/ui/screens/perfil_screen.dart';
 import 'package:vitaro_app/ui/screens/workouts_screen.dart';
 import 'package:vitaro_app/ui/widgets/drawer.dart';
 
-class TabsScreen extends ConsumerStatefulWidget {
+class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  ConsumerState<TabsScreen> createState() => _TabsScreenState();
+  State<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _TabsScreenState extends ConsumerState<TabsScreen> {
-  late UserModel _currentUser;
+class _TabsScreenState extends State<TabsScreen> {
   int _currentIndex = 1;
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    _currentUser = ref.read(currentUserProvider);
-    Future.microtask(() => _verifyCurrentUser());
-  }
-
-  void _verifyCurrentUser() async {
-    final storage = FlutterSecureStorage();
-    final accessToken = await storage.read(key: 'access_token');
-    if (mounted) {
-      final container = ProviderScope.containerOf(context);
-      if (accessToken == null) {
-        await UserSignoutUsecase.execute(container);
-      }
-      if (_currentUser.token != accessToken) {
-        await FindCurrentUserUsecase.execute(container);
-      }
-    }
   }
 
   void logOut() async {
-    final container = ProviderScope.containerOf(context);
-    await UserSignoutUsecase.execute(container);
+    await _authService.signOut();
   }
 
   @override

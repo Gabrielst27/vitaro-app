@@ -5,5 +5,7 @@ class Result<T> {
 
   Result.success(this.data) : isSuccess = true, errorMessage = null;
 
+  Result.successEmpty() : isSuccess = true, data = null, errorMessage = null;
+
   Result.failure(this.errorMessage) : isSuccess = false, data = null;
 }

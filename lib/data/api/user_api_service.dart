@@ -1,17 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:vitaro_app/data/api/dio_client.dart';
 import 'package:vitaro_app/data/api/dtos/authenticated_user_dto.dart';
 import 'package:vitaro_app/domain/models/result_dto.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
 import 'package:vitaro_app/env.dart';
 
-final _firebaseAuth = FirebaseAuth.instance;
-final _dio = DioClient().client;
+class UserApiService extends ChangeNotifier {
+  final _dio = DioClient().client;
+  final int timeoutSeconds = 30;
 
-class UserApiService {
   Future<Result<AuthenticatedUserDto>> signUp(UserModel user) async {
     try {
       final response = await _dio
@@ -24,46 +24,18 @@ class UserApiService {
               'password': user.password,
             }),
           )
-          .timeout(const Duration(seconds: 20));
+          .timeout(Duration(seconds: timeoutSeconds));
       if (response.statusCode! >= 400) {
         final errorData = response.data;
         final errorMessage = errorData['message'] ?? 'Erro desconhecido';
         return Result.failure(errorMessage);
       }
-      final Map<String, dynamic> data = response.data;
-      final userDto = AuthenticatedUserMapper.toDto(data);
-      final credentials = await _firebaseAuth.signInWithCustomToken(
-        userDto.token,
-      );
-      final idToken = await credentials.user!.getIdToken();
-      userDto.updateToken(idToken!);
+      final userDto = AuthenticatedUserMapper.toDto(response.data);
       return Result.success(userDto);
     } catch (error) {
-      return Result.failure('Erro ao conectar com o servidor: $error');
-    }
-  }
-
-  Future<Result<void>> signIn(
-    String email,
-    String password,
-  ) async {
-    try {
-      final credentials = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if (credentials.user == null) {
-        return Result.failure('Email ou senha incorretos');
-      }
-      final idToken = await credentials.user!.getIdToken();
-      final storage = FlutterSecureStorage();
-      await storage.write(key: 'access_token', value: idToken);
-      return Result.success({});
-    } on FirebaseAuthException catch (error) {
-      final errorMessage = _firebaseAuthErrorMessage(error.code);
+      debugPrint(error.toString());
+      final errorMessage = _errorMessage(error);
       return Result.failure(errorMessage);
-    } catch (error) {
-      return Result.failure('Erro ao conectar com o servidor: $error');
     }
   }
 
@@ -71,13 +43,19 @@ class UserApiService {
     try {
       final response = await _dio
           .get('$vitaroApiUrl/users/find-current-user')
-          .timeout(Duration(seconds: 12));
+          .timeout(
+            Duration(seconds: timeoutSeconds),
+            onTimeout: () => throw TimeoutException('Timeout'),
+          );
       if (response.statusCode! >= 400) {
         return Result.failure(response.data);
       }
-      final Map<String, dynamic> data = response.data;
-      final userDto = AuthenticatedUserMapper.toDto({...data});
+      final userDto = AuthenticatedUserMapper.toDto({...response.data});
       return Result.success(userDto);
+    } on TimeoutException {
+      return Result.failure(
+        'Não foi possível se conectar ao servidor. Tente novamente mais tarde.',
+      );
     } catch (error) {
       if (error is DioException) {
         if (error.response!.data['error'] == "auth/id-token-expired") {
@@ -89,20 +67,12 @@ class UserApiService {
     }
   }
 
-  String _firebaseAuthErrorMessage(String code) {
-    switch (code) {
-      case 'invalid-email':
-        return 'O e-mail informado é inválido.';
-      case 'user-disabled':
-        return 'Este usuário está desativado.';
-      case 'user-not-found':
-        return 'Usuário não encontrado.';
-      case 'wrong-password':
-        return 'Senha incorreta.';
-      case 'network-request-failed':
-        return 'Sem conexão com a internet.';
+  String _errorMessage(error) {
+    switch (error.response.data['message']) {
+      case 'email-already-exists':
+        return 'Email já cadastrado';
       default:
-        return 'Erro na autenticação: $code';
+        return 'Erro de autenticação: ${error.message}';
     }
   }
 }

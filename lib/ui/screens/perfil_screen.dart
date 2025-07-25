@@ -1,14 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vitaro_app/domain/providers/current_user_provider.dart';
 
-class PerfilScreen extends ConsumerWidget {
+class PerfilScreen extends StatelessWidget {
   const PerfilScreen({super.key, required this.onLogout});
 
   final void Function() onLogout;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final auth = FirebaseAuth.instance;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -40,7 +40,7 @@ class PerfilScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 96),
           Text(
-            ref.watch(currentUserProvider).name,
+            auth.currentUser!.displayName!,
             style: Theme.of(context).textTheme.titleSmall,
             textAlign: TextAlign.center,
           ),
