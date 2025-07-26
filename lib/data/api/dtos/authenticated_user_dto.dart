@@ -5,7 +5,7 @@ class AuthenticatedUserDto {
   final double? age;
   final double? height;
   final double? weight;
-  final String token;
+  String token;
 
   AuthenticatedUserDto({
     required this.id,
@@ -27,7 +27,7 @@ class AuthenticatedUserMapper {
       age: _toNullableDouble(data['age']),
       height: _toNullableDouble(data['height']),
       weight: _toNullableDouble(data['weight']),
-      token: data['token'],
+      token: data['token'] ?? '',
     );
   }
 

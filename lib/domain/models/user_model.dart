@@ -1,5 +1,3 @@
-import 'package:vitaro_app/data/api/dtos/authenticated_user_dto.dart';
-
 class UserModel {
   final String? id;
   final String name;
@@ -8,6 +6,7 @@ class UserModel {
   final double? age;
   final double? height;
   final double? weight;
+  final String? token;
 
   UserModel({
     this.id,
@@ -17,15 +16,6 @@ class UserModel {
     this.age,
     this.height,
     this.weight,
+    this.token,
   });
-}
-
-class UserModelMapper {
-  static UserModel toModel(AuthenticatedUserDto authenticatedUser) {
-    return UserModel(
-      id: authenticatedUser.id,
-      name: authenticatedUser.name,
-      email: authenticatedUser.email,
-    );
-  }
 }

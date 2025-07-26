@@ -27,6 +27,11 @@ migrate_working_dir/
 env
 dev_env.json
 
+# Firebase
+google-services.json
+firebase_options.dart
+firebase.json
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
-import 'package:vitaro_app/domain/use_cases/user_signup_usecase.dart';
+import 'package:vitaro_app/domain/services/auth_service.dart';
+
+final AuthService _authService = AuthService();
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
 
-  const AuthForm({super.key, required this.isLogin});
+  const AuthForm({
+    super.key,
+    required this.isLogin,
+  });
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -19,30 +24,46 @@ class _AuthFormState extends State<AuthForm> {
   bool _isLoading = false;
 
   void _submit() async {
-    setState(() {
-      _isLoading = true;
-    });
     bool isValid = _formKey.currentState!.validate();
     if (isValid) {
+      setState(() {
+        _isLoading = true;
+      });
       _formKey.currentState!.save();
       if (widget.isLogin) {
+        final signIn = await _authService.signIn(
+          _enteredEmail,
+          _passwordController.text.trim(),
+        );
+        if (!signIn.isSuccess) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('${signIn.errorMessage}')),
+            );
+          }
+          setState(() {
+            _isLoading = false;
+          });
+        }
       } else {
         final user = UserModel(
           name: _enteredName,
           email: _enteredEmail,
           password: _passwordController.text.trim(),
         );
-        final signUp = await UserSignupUsecase.execute(user);
-        setState(() {
-          _isLoading = false;
-        });
-        if (!signUp.isSuccess) {
+        try {
+          await _authService.signUp(user);
+        } catch (error) {
           if (mounted) {
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erro: ${signUp.errorMessage}')),
+              SnackBar(content: Text('Erro: ${error.toString()}')),
             );
           }
+          setState(() {
+            _isLoading = false;
+          });
         }
       }
     }
@@ -55,7 +76,7 @@ class _AuthFormState extends State<AuthForm> {
       child: Form(
         key: _formKey,
         child: Column(
-          spacing: 32,
+          spacing: 24,
           children: [
             if (!widget.isLogin)
               TextFormField(
@@ -63,10 +84,14 @@ class _AuthFormState extends State<AuthForm> {
                 keyboardType: TextInputType.name,
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 12,
+                  ),
                   hintText: 'Nome',
                   prefixIcon: Icon(Icons.person),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
@@ -86,10 +111,14 @@ class _AuthFormState extends State<AuthForm> {
               enabled: !_isLoading,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 12,
+                ),
                 hintText: 'E-mail',
                 prefixIcon: Icon(Icons.email),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
@@ -113,10 +142,14 @@ class _AuthFormState extends State<AuthForm> {
               controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 12,
+                ),
                 hintText: 'Senha',
                 prefixIcon: Icon(Icons.password),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
@@ -136,10 +169,14 @@ class _AuthFormState extends State<AuthForm> {
                 enabled: !_isLoading,
                 obscureText: true,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 12,
+                  ),
                   hintText: 'Confirmar senha',
                   prefixIcon: Icon(Icons.password),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,

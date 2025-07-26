@@ -1,4 +1,4 @@
-package com.example.vitaro_app
+package com.vitaro.app
 
 import io.flutter.embedding.android.FlutterActivity
 

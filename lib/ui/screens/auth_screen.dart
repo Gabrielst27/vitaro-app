@@ -19,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
           children: [
             if (_isLogin)
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Center(
                   child: Text(
                     'VITARO',
@@ -28,7 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
             Expanded(
-              flex: 3,
+              flex: 5,
               child: Card(
                 margin: EdgeInsets.only(top: _isLogin ? 0 : 48),
                 shape: RoundedRectangleBorder(
@@ -45,7 +45,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           minHeight: constraints.maxHeight,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(24.0),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 24,
+                            horizontal: 32,
+                          ),
                           child: IntrinsicHeight(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
