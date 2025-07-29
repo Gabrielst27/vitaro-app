@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vitaro_app/domain/services/auth_service.dart';
+import 'package:vitaro_app/domain/services/workouts_service.dart';
 import 'package:vitaro_app/ui/screens/home_screen.dart';
 import 'package:vitaro_app/ui/screens/perfil_screen.dart';
 import 'package:vitaro_app/ui/screens/workouts_screen.dart';
@@ -16,6 +17,7 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _currentIndex = 1;
   late AuthService _authService;
+  late WorkoutsService _workoutsService;
 
   void logOut() async {
     await _authService.signOut();
@@ -24,6 +26,10 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     _authService = context.watch<AuthService>();
+    _workoutsService = context.watch<WorkoutsService>();
+    if (_workoutsService.currentUserWorkouts == null) {
+      _workoutsService.findByCurrentUser();
+    }
     Widget content = Center(
       child: Text('Error: No content.'),
     );

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vitaro_app/app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:vitaro_app/domain/services/auth_service.dart';
+import 'package:vitaro_app/domain/services/workouts_service.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -12,6 +13,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthService()),
+        ChangeNotifierProvider(create: (context) => WorkoutsService()),
       ],
       child: const App(),
     ),
