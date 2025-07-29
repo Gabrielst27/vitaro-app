@@ -10,10 +10,12 @@ import 'package:vitaro_app/env.dart';
 final _dio = DioClient().client;
 
 class WorkoutApiService {
-  Future<Result<List<WorkoutsDto>>> findUserWorkouts(String userId) async {
+  Future<Result<PaginationDto<WorkoutsDto>>> findUserWorkouts(
+    String userId,
+  ) async {
     try {
       final result = await _dio
-          .get('$vitaroApiUrl/workouts/$userId/user-workouts')
+          .get('$vitaroApiUrl/workouts/users/$userId/user-workouts')
           .timeout(
             Duration(seconds: 12),
             onTimeout: () => throw TimeoutException('timeout'),
@@ -21,9 +23,11 @@ class WorkoutApiService {
       if (result.statusCode! >= 400) {
         return Result.failure('Erro: ${result.data}');
       }
-      final PaginationDto paginationDto = PaginationMapper.toDto(result.data);
+      final PaginationDto<WorkoutsDto> paginationDto = PaginationMapper.toDto(
+        result.data,
+      );
       final List<WorkoutsDto> workoutsDto = [];
-      for (final itemData in paginationDto.items) {
+      for (final itemData in paginationDto.itemsResponse) {
         final WorkoutsDto workoutDto = WorkoutsMapper.toDto(itemData);
         final List<ExerciseDto> exercisesDto = [];
         for (final exercise in workoutDto.exercisesResponse) {
@@ -38,7 +42,8 @@ class WorkoutApiService {
         workoutDto.exercisesDto = exercisesDto;
         workoutsDto.add(workoutDto);
       }
-      return Result.success(workoutsDto);
+      paginationDto.itemsDto = workoutsDto;
+      return Result.success(paginationDto);
     } on TimeoutException {
       return Result.failure(
         'Não foi possível se conectar ao servidor. Tente novamente mais tarde.',

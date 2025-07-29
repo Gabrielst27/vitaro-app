@@ -149,7 +149,7 @@ final List<ExerciseModel> staticExercises = [
   ),
   ExerciseModel(
     id: '0030',
-    name: 'Mesa Flexora na Máquina',
+    name: 'Mesa Flexora',
     muscularGroup: EMuscularGroups.hamstrings,
   ),
   ExerciseModel(
@@ -184,8 +184,8 @@ final List<ExerciseModel> staticExercises = [
   ),
   ExerciseModel(
     id: '0037',
-    name: 'Gêmeos no Leg Press com Peso Corporal',
-    muscularGroup: EMuscularGroups.calf,
+    name: 'Leg Press 45',
+    muscularGroup: EMuscularGroups.quadriceps,
   ),
   ExerciseModel(
     id: '0038',
@@ -2294,7 +2294,7 @@ final List<ExerciseModel> staticExercises = [
   ),
   ExerciseModel(
     id: '0459',
-    name: 'Gêmeos no Leg Press com Barra',
+    name: 'Gêmeos em Pé na Máquina',
     muscularGroup: EMuscularGroups.calf,
   ),
   ExerciseModel(

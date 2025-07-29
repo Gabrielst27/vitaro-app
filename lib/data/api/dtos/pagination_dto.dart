@@ -1,12 +1,13 @@
 class PaginationDto<T> {
-  final List<T> items;
+  final List<dynamic> itemsResponse;
   final int total;
   final int currentPage;
   final int lastPage;
   final int perPage;
+  List<T>? itemsDto;
 
   PaginationDto({
-    required this.items,
+    required this.itemsResponse,
     required this.total,
     required this.currentPage,
     required this.lastPage,
@@ -14,10 +15,10 @@ class PaginationDto<T> {
   });
 }
 
-class PaginationMapper {
-  static PaginationDto toDto(Map<String, dynamic> data) {
-    return PaginationDto(
-      items: data['items'],
+class PaginationMapper<T> {
+  static PaginationDto<T> toDto<T>(Map<String, dynamic> data) {
+    return PaginationDto<T>(
+      itemsResponse: data['items'],
       total: data['total'],
       currentPage: data['currentPage'],
       lastPage: data['lastPage'],

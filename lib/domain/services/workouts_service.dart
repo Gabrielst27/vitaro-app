@@ -11,6 +11,7 @@ class WorkoutsService extends ChangeNotifier {
   final _workoutApi = WorkoutApiService();
   final _auth = FirebaseAuth.instance;
   List<WorkoutModel>? currentUserWorkouts;
+  int? currentWorkoutsPage;
 
   Future<void> findByCurrentUser() async {
     final id = _auth.currentUser?.uid;
@@ -24,8 +25,8 @@ class WorkoutsService extends ChangeNotifier {
       }
       final List<WorkoutModel> workouts = [];
       final data = result.data;
-      if (data != null && data.isNotEmpty) {
-        for (final workoutDto in data) {
+      if (data != null && data.itemsDto != null && data.itemsDto!.isNotEmpty) {
+        for (final workoutDto in data.itemsDto!) {
           final WorkoutModel workout = WorkoutModel(
             id: workoutDto.id,
             authorId: workoutDto.authorId,
@@ -68,6 +69,7 @@ class WorkoutsService extends ChangeNotifier {
         }
       }
       currentUserWorkouts = workouts;
+      currentWorkoutsPage = result.data!.currentPage;
       notifyListeners();
     } catch (error) {
       throw Exception(error.toString());

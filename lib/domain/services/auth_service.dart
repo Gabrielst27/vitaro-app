@@ -85,6 +85,7 @@ class AuthService extends ChangeNotifier {
       token: result.data!.token,
     );
     currentUser = model;
+    notifyListeners();
   }
 
   Future<void> signOut() async {
