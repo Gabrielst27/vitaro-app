@@ -51,8 +51,17 @@ class _TabsScreenState extends State<TabsScreen> {
       length: 3,
       child: SafeArea(
         child: Scaffold(
-          drawer: CustomDrawer(),
+          drawer: _currentIndex == 0 ? CustomDrawer() : null,
           body: content,
+          floatingActionButton: _currentIndex == 0
+              ? ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(72, 44),
+                  ),
+                  child: Icon(Icons.add, size: 24),
+                )
+              : null,
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,
             destinations: [
