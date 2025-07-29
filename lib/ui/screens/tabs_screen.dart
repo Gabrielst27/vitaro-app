@@ -34,7 +34,9 @@ class _TabsScreenState extends State<TabsScreen> {
       child: Text('Error: No content.'),
     );
     if (_currentIndex == 0) {
-      content = WorkoutsScreen();
+      content = WorkoutsScreen(
+        workouts: _workoutsService.currentUserWorkouts ?? [],
+      );
     }
     if (_currentIndex == 1) {
       content = HomeScreen();

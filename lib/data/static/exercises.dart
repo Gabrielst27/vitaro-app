@@ -1,7 +1,7 @@
 import 'package:vitaro_app/domain/enums/muscular_groups_enum.dart';
 import 'package:vitaro_app/domain/models/exercise_model.dart';
 
-final List<ExerciseModel> exercises = [
+final List<ExerciseModel> staticExercises = [
   ExerciseModel(
     id: '0001',
     name: 'Supino Reto na Máquina',

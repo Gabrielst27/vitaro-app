@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:vitaro_app/domain/models/workouts_model.dart';
 
 class WorkoutItem extends StatelessWidget {
-  const WorkoutItem({super.key});
+  final WorkoutModel workout;
+
+  const WorkoutItem({super.key, required this.workout});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class WorkoutItem extends StatelessWidget {
               children: [
                 Icon(Icons.calculate),
                 Text(
-                  'TREINO',
+                  workout.title,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Icon(
@@ -26,10 +29,11 @@ class WorkoutItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 32),
-            Text('Supino Reto na Máquina'),
-            Text('Supino Reto na Máquina'),
-            Text('Supino Reto na Máquina'),
-            Text('...'),
+            if (workout.exercises.isNotEmpty)
+              ...workout.exercises.map((exercise) {
+                return Text(exercise.name);
+              }),
+            if (workout.exercises.length > 3) const Text('...'),
             const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
