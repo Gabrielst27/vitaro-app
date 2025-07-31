@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/data/api/workout_api_service.dart';
 import 'package:vitaro_app/data/static/exercises.dart';
-import 'package:vitaro_app/domain/enums/muscular_groups_enum.dart';
 import 'package:vitaro_app/domain/models/exercise_model.dart';
 import 'package:vitaro_app/domain/models/series_model.dart';
 import 'package:vitaro_app/domain/models/workouts_model.dart';
@@ -38,13 +37,13 @@ class WorkoutsService extends ChangeNotifier {
           final exercisesDto = workoutDto.exercisesDto;
           if (exercisesDto != null && exercisesDto.isNotEmpty) {
             for (final exerciseDto in exercisesDto) {
-              final EMuscularGroups muscularGroup = staticExercises
-                  .firstWhere((ex) => ex.id == exerciseDto.refId)
-                  .muscularGroup;
+              final staticExercise = staticExercises.firstWhere(
+                (ex) => ex.id == exerciseDto.refId,
+              );
               final ExerciseModel exercise = ExerciseModel(
                 id: exerciseDto.id,
-                name: exerciseDto.name,
-                muscularGroup: muscularGroup,
+                name: staticExercise.name,
+                muscularGroup: staticExercise.muscularGroup,
                 series: [],
               );
               final seriesDto = exerciseDto.seriesDto;

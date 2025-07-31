@@ -21,6 +21,8 @@ class AuthService extends ChangeNotifier {
     _auth.authStateChanges().listen((User? user) async {
       authUser = user;
       if (user != null) {
+        final token = await user.getIdToken();
+        print(token);
         try {
           await _findCurrentUser();
         } catch (error) {

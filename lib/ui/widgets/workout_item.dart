@@ -44,9 +44,12 @@ class _WorkoutItemState extends State<WorkoutItem>
                       widget.workout.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.secondary,
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.edit,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   ],
                 ),

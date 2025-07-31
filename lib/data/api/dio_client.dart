@@ -6,6 +6,7 @@ class DioClient {
   final Dio _dio = Dio();
 
   DioClient() {
+    _dio.options.validateStatus = (status) => status != null;
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {

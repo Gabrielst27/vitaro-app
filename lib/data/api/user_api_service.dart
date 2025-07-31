@@ -17,7 +17,6 @@ class UserApiService extends ChangeNotifier {
       final response = await _dio
           .post(
             '$vitaroApiUrl/users/sign-up',
-
             data: jsonEncode(<String, dynamic>{
               'name': user.name,
               'email': user.email,
@@ -33,9 +32,7 @@ class UserApiService extends ChangeNotifier {
       final userDto = AuthenticatedUserMapper.toDto(response.data);
       return Result.success(userDto);
     } catch (error) {
-      debugPrint(error.toString());
-      final errorMessage = _errorMessage(error);
-      return Result.failure(errorMessage);
+      return Result.failure(_errorMessage(error));
     }
   }
 
