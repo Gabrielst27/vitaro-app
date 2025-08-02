@@ -48,8 +48,6 @@ class WorkoutsMapper {
         return EWorkoutGoals.hypertrophy;
       case 'strength':
         return EWorkoutGoals.strength;
-      case 'endurance':
-        return EWorkoutGoals.endurance;
       default:
         throw Exception('$value não existe em EWorkoutGoals');
     }

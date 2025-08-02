@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/workouts_model.dart';
+import 'package:vitaro_app/ui/screens/edit_workout_screen.dart';
 
 class WorkoutItem extends StatefulWidget {
   final WorkoutModel workout;
@@ -20,12 +21,25 @@ class _WorkoutItemState extends State<WorkoutItem>
     });
   }
 
+  void _editWorkout() {
+    Navigator.of(
+      context,
+    ).push(
+      MaterialPageRoute(
+        builder: (context) => EditWorkoutScreen(
+          workout: widget.workout,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _toggleExpanded,
       child: Card(
         margin: EdgeInsets.all(16),
+        clipBehavior: Clip.hardEdge,
         child: Padding(
           padding: EdgeInsets.all(24),
           child: AnimatedSize(
@@ -40,12 +54,19 @@ class _WorkoutItemState extends State<WorkoutItem>
                       Icons.delete,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
-                    Text(
-                      widget.workout.title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Expanded(
+                      child: Text(
+                        widget.workout.title,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleMedium,
+                        maxLines: _isExpanded ? null : 1,
+                        overflow: _isExpanded
+                            ? TextOverflow.visible
+                            : TextOverflow.ellipsis,
+                      ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: _editWorkout,
                       icon: Icon(
                         Icons.edit,
                         color: Theme.of(context).colorScheme.secondary,

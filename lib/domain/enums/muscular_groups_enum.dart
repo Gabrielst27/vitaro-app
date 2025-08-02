@@ -1,6 +1,7 @@
 enum EMuscularGroups {
   chest,
-  back,
+  trapezius,
+  dorsi,
   biceps,
   triceps,
   forearm,

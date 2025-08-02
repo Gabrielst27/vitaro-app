@@ -26,7 +26,7 @@ class EditWorkoutMapper {
         .map((exercise) => EditExcerciseMapper.toDto(exercise))
         .toList();
     return jsonEncode(<String, dynamic>{
-      'id': "a30f94c1-4c8f-4eb8-b23a-4aab8e780a1b",
+      'id': model.id,
       'title': model.title,
       'goal': model.goal.name.toString(),
       'sport': model.sport.name.toString(),
