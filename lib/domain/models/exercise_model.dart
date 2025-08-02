@@ -6,11 +6,13 @@ class ExerciseModel {
   final String name;
   final EMuscularGroups muscularGroup;
   final List<SeriesModel>? series;
+  final String imagePath;
 
   ExerciseModel({
     required this.id,
     required this.name,
     required this.muscularGroup,
+    required this.imagePath,
     this.series,
   });
 }

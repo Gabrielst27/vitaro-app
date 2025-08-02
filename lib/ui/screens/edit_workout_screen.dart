@@ -11,6 +11,7 @@ class EditWorkoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
         title: Text(
           'Editar',
           style: Theme.of(context).textTheme.titleSmall,
@@ -21,8 +22,11 @@ class EditWorkoutScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: EditWorkoutForm(
-            workout: workout,
+          child: Container(
+            color: Theme.of(context).colorScheme.surfaceContainer,
+            child: EditWorkoutForm(
+              workout: workout,
+            ),
           ),
         ),
       ),

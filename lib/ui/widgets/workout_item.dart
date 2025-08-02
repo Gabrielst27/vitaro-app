@@ -48,12 +48,9 @@ class _WorkoutItemState extends State<WorkoutItem>
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  spacing: 24,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.delete,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
                     Expanded(
                       child: Text(
                         widget.workout.title,
@@ -65,13 +62,6 @@ class _WorkoutItemState extends State<WorkoutItem>
                             : TextOverflow.ellipsis,
                       ),
                     ),
-                    IconButton(
-                      onPressed: _editWorkout,
-                      icon: Icon(
-                        Icons.edit,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -81,8 +71,21 @@ class _WorkoutItemState extends State<WorkoutItem>
                     i < widget.workout.exercises.length && i <= 2;
                     i++
                   )
-                    Text(
-                      '${widget.workout.exercises[i].series!.length}x ${widget.workout.exercises[i].name}',
+                    Row(
+                      spacing: 16,
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          child: ClipOval(
+                            child: Image.asset(
+                              widget.workout.exercises[i].imagePath,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '${widget.workout.exercises[i].series!.length}x ${widget.workout.exercises[i].name}',
+                        ),
+                      ],
                     ),
                 if (widget.workout.exercises.length > 3 && !_isExpanded)
                   const Text('...'),
@@ -92,13 +95,29 @@ class _WorkoutItemState extends State<WorkoutItem>
                       '${widget.workout.exercises[i].series!.length}x ${widget.workout.exercises[i].name}',
                     ),
                 const SizedBox(height: 24),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.play_circle,
-                    size: 48,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(
+                      Icons.delete,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.play_circle,
+                        size: 48,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: _editWorkout,
+                      icon: Icon(
+                        Icons.edit,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

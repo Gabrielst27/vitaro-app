@@ -44,6 +44,7 @@ class WorkoutsService extends ChangeNotifier {
                 id: exerciseDto.id,
                 name: staticExercise.name,
                 muscularGroup: staticExercise.muscularGroup,
+                imagePath: staticExercise.imagePath,
                 series: [],
               );
               final seriesDto = exerciseDto.seriesDto;
