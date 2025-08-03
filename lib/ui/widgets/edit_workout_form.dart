@@ -27,17 +27,32 @@ class _EditWorkoutFormState extends State<EditWorkoutForm> {
           children: [
             TextFormField(
               initialValue: widget.workout.title,
+              style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 hintText: 'Insira o título',
                 label: Text('Título'),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
             Row(
+              spacing: 12,
               children: [
                 Expanded(
                   child: DropdownButtonFormField<ESports>(
-                    decoration: InputDecoration(label: Text('Esporte')),
+                    decoration: InputDecoration(
+                      label: Text('Esporte'),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      filled: true,
+                      fillColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLowest,
+                    ),
                     dropdownColor: Theme.of(
                       context,
                     ).colorScheme.surfaceContainerLow,
@@ -54,10 +69,19 @@ class _EditWorkoutFormState extends State<EditWorkoutForm> {
                     onChanged: (value) {},
                   ),
                 ),
-                const SizedBox(width: 32),
                 Expanded(
                   child: DropdownButtonFormField<EWorkoutGoals>(
-                    decoration: InputDecoration(label: Text('Objetivo')),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLowest,
+                      label: Text('Objetivo'),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
                     dropdownColor: Theme.of(
                       context,
                     ).colorScheme.surfaceContainerLow,

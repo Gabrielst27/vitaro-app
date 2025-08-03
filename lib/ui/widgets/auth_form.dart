@@ -23,6 +23,12 @@ class _AuthFormState extends State<AuthForm> {
   String _enteredName = '';
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   void _submit() async {
     bool isValid = _formKey.currentState!.validate();
     if (isValid) {
