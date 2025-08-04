@@ -52,7 +52,22 @@ class _TabsScreenState extends State<TabsScreen> {
       child: SafeArea(
         child: Scaffold(
           drawer: _currentIndex == 0 ? CustomDrawer() : null,
-          body: content,
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Theme.of(context).colorScheme.surfaceContainer,
+                  Theme.of(context).colorScheme.surface,
+                  Theme.of(context).colorScheme.surface,
+                  Theme.of(context).colorScheme.surface,
+                  Theme.of(context).colorScheme.surfaceContainerLowest,
+                ],
+              ),
+            ),
+            child: content,
+          ),
           floatingActionButton: _currentIndex == 0
               ? ElevatedButton(
                   onPressed: () {},

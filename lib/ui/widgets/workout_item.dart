@@ -38,10 +38,11 @@ class _WorkoutItemState extends State<WorkoutItem>
     return GestureDetector(
       onTap: _toggleExpanded,
       child: Card(
+        color: Theme.of(context).colorScheme.surfaceContainer,
         margin: EdgeInsets.all(16),
         clipBehavior: Clip.hardEdge,
         child: Padding(
-          padding: EdgeInsets.all(24),
+          padding: EdgeInsets.symmetric(vertical: 16),
           child: AnimatedSize(
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInBack,
@@ -64,39 +65,71 @@ class _WorkoutItemState extends State<WorkoutItem>
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 if (widget.workout.exercises.isNotEmpty)
                   for (
                     int i = 0;
-                    i < widget.workout.exercises.length && i <= 2;
+                    i < widget.workout.exercises.length && i <= 1;
                     i++
                   )
-                    Row(
-                      spacing: 16,
-                      children: [
-                        CircleAvatar(
-                          radius: 24,
-                          child: ClipOval(
-                            child: Image.asset(
-                              widget.workout.exercises[i].imagePath,
+                    Container(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLowest,
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Row(
+                            spacing: 16,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                child: ClipOval(
+                                  child: Image.asset(
+                                    widget.workout.exercises[i].imagePath,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '${widget.workout.exercises[i].series!.length}x ${widget.workout.exercises[i].name}',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                if (widget.workout.exercises.length > 2 && !_isExpanded)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: const Text('Ver mais'),
+                  ),
+                if (_isExpanded)
+                  for (int i = 2; i < widget.workout.exercises.length; i++)
+                    Container(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLowest,
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        spacing: 16,
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            child: ClipOval(
+                              child: Image.asset(
+                                widget.workout.exercises[i].imagePath,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          '${widget.workout.exercises[i].series!.length}x ${widget.workout.exercises[i].name}',
-                        ),
-                      ],
+                          Text(
+                            '${widget.workout.exercises[i].series!.length}x ${widget.workout.exercises[i].name}',
+                          ),
+                        ],
+                      ),
                     ),
-                if (widget.workout.exercises.length > 3 && !_isExpanded)
-                  const Text('...'),
-                if (_isExpanded)
-                  for (int i = 3; i < widget.workout.exercises.length; i++)
-                    Text(
-                      '${widget.workout.exercises[i].series!.length}x ${widget.workout.exercises[i].name}',
-                    ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Icon(
                       Icons.delete,

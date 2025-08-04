@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vitaro_app/ui/widgets/goals_filter.dart';
-import 'package:vitaro_app/ui/widgets/sports_filter.dart';
+import 'package:vitaro_app/ui/widgets/filters/goals_filter.dart';
+import 'package:vitaro_app/ui/widgets/filters/sports_filter.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});

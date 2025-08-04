@@ -33,17 +33,18 @@ final darkTheme = ThemeData().copyWith(
   ),
   textTheme: TextTheme().copyWith(
     titleLarge: TextStyle(
-      fontSize: 40,
-      color: darkColorScheme.primary,
-      fontWeight: FontWeight.bold,
-    ),
-    titleMedium: TextStyle(
       fontSize: 32,
       color: darkColorScheme.primary,
       fontWeight: FontWeight.bold,
     ),
-    titleSmall: TextStyle(
+    titleMedium: TextStyle(
       fontSize: 24,
+      color: darkColorScheme.primary,
+      fontWeight: FontWeight.bold,
+    ),
+    titleSmall: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
     ),
     bodyLarge: TextStyle(
       fontSize: 16,
