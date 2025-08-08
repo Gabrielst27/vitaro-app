@@ -10,7 +10,7 @@ class WorkoutList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 32),
+      padding: const EdgeInsets.only(bottom: 16),
       child: ListView.builder(
         itemCount: workouts.length,
         itemBuilder: (context, index) => WorkoutItem(

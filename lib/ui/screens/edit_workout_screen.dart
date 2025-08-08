@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/workouts_model.dart';
-import 'package:vitaro_app/domain/services/exercises_service.dart';
-import 'package:vitaro_app/ui/widgets/edit_workout_form.dart';
-import 'package:vitaro_app/ui/widgets/exercises_list/exercises_list.dart';
+import 'package:vitaro_app/ui/widgets/exercises_list/edit_workout_header.dart';
+import 'package:vitaro_app/ui/widgets/exercises_list/muscle_targets.dart';
+import 'package:vitaro_app/ui/widgets/exercises_list/workout_exercise_item.dart';
 
 class EditWorkoutScreen extends StatelessWidget {
   final WorkoutModel workout;
@@ -11,10 +11,9 @@ class EditWorkoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final exercisesService = ExercisesService();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
         title: Text(
           'Editar',
           style: Theme.of(context).textTheme.titleSmall,
@@ -24,24 +23,30 @@ class EditWorkoutScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              color: Theme.of(context).colorScheme.surfaceContainer,
-              child: EditWorkoutForm(
-                workout: workout,
+        child: CustomScrollView(
+          slivers: [
+            SliverPersistentHeader(
+              delegate: EditWorkoutHeader(workout: workout),
+            ),
+            SliverPersistentHeader(
+              delegate: MuscleTargets(exercises: workout.exercises),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) =>
+                    WorkoutExerciseItem(exercise: workout.exercises[index]),
+                childCount: workout.exercises.length,
               ),
             ),
-            const SizedBox(height: 24),
-            Expanded(
-              child: ExercisesList(
-                exercises: workout.exercises,
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TextButton.icon(
+                  onPressed: () {},
+                  label: Text('Adicionar Exercício'),
+                  icon: Icon(Icons.add),
+                ),
               ),
-            ),
-            TextButton.icon(
-              icon: Icon(Icons.add),
-              onPressed: () {},
-              label: Text('Adicionar exercício'),
             ),
           ],
         ),

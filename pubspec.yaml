@@ -66,18 +66,18 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/Logo.png
-    - assets/images/Abdomen.png
-    - assets/images/Biceps.png
-    - assets/images/Calf.png
-    - assets/images/Chest.png
-    - assets/images/Deltoid.png
+    - assets/images/Abdomen.webp
+    - assets/images/Biceps.webp
+    - assets/images/Calf.webp
+    - assets/images/Chest.webp
+    - assets/images/Deltoid.webp
     - assets/images/Dorsi.png
     - assets/images/Forearm.png
-    - assets/images/Glute.png
-    - assets/images/Hamstrings.png
-    - assets/images/Quadriceps.png
-    - assets/images/Trapezius.png
-    - assets/images/Triceps.png
+    - assets/images/Glute.webp
+    - assets/images/Hamstrings.webp
+    - assets/images/Quadriceps.webp
+    - assets/images/Trapezius.webp
+    - assets/images/Triceps.webp
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

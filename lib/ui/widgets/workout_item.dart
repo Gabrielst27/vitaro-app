@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitaro_app/domain/enums/muscular_groups_enum.dart';
 import 'package:vitaro_app/domain/models/workouts_model.dart';
 import 'package:vitaro_app/ui/screens/edit_workout_screen.dart';
 
@@ -83,10 +84,14 @@ class _WorkoutItemState extends State<WorkoutItem>
                             spacing: 16,
                             children: [
                               CircleAvatar(
-                                radius: 20,
+                                radius: 24,
                                 child: ClipOval(
                                   child: Image.asset(
-                                    widget.workout.exercises[i].imagePath,
+                                    widget
+                                        .workout
+                                        .exercises[i]
+                                        .muscularGroup
+                                        .imagePath,
                                   ),
                                 ),
                               ),
@@ -112,7 +117,11 @@ class _WorkoutItemState extends State<WorkoutItem>
                             radius: 20,
                             child: ClipOval(
                               child: Image.asset(
-                                widget.workout.exercises[i].imagePath,
+                                widget
+                                    .workout
+                                    .exercises[i]
+                                    .muscularGroup
+                                    .imagePath,
                               ),
                             ),
                           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitaro_app/domain/enums/muscular_groups_enum.dart';
 import 'package:vitaro_app/domain/models/exercise_model.dart';
 
 class WorkoutExerciseItem extends StatelessWidget {
@@ -9,7 +10,7 @@ class WorkoutExerciseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.all(16),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: ListTile(
@@ -20,7 +21,10 @@ class WorkoutExerciseItem extends StatelessWidget {
               spacing: 24,
               children: [
                 ClipOval(
-                  child: Image.asset(exercise.imagePath, scale: 4),
+                  child: Image.asset(
+                    exercise.muscularGroup.imagePath,
+                    scale: 4,
+                  ),
                 ),
                 Text(exercise.name, textAlign: TextAlign.center),
               ],
