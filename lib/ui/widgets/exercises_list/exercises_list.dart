@@ -9,11 +9,33 @@ class ExercisesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: exercises.length,
-      itemBuilder: (context, index) => WorkoutExerciseItem(
-        exercise: exercises[index],
-      ),
+    return Column(
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ...exercises.map(
+                (e) => ClipOval(
+                  child: Image.asset(
+                    e.imagePath,
+                    scale: 3.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        Expanded(
+          child: ListView.builder(
+            itemCount: exercises.length,
+            itemBuilder: (context, index) => WorkoutExerciseItem(
+              exercise: exercises[index],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

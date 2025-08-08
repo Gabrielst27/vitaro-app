@@ -109,6 +109,10 @@ class _AuthFormState extends State<AuthForm> {
                       value.length > 48) {
                     return 'O nome deve ter entre 4 e 48 caracteres';
                   }
+                  final nameRegExp = RegExp(r'^[A-Za-zÀ-ÿ\s]+$');
+                  if (!nameRegExp.hasMatch(value)) {
+                    return 'O nome deve conter apenas letras';
+                  }
                   return null;
                 },
                 onSaved: (newValue) => _enteredName = newValue!.trim(),

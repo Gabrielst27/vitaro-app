@@ -28,7 +28,7 @@ class _TabsScreenState extends State<TabsScreen> {
     _authService = context.watch<AuthService>();
     _workoutsService = context.watch<WorkoutsService>();
     if (_workoutsService.currentUserWorkouts == null) {
-      _workoutsService.findByCurrentUser();
+      _workoutsService.findByUser(_authService.authUser!.id);
     }
     Widget content = Center(
       child: Text('Error: No content.'),
@@ -59,7 +59,6 @@ class _TabsScreenState extends State<TabsScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   Theme.of(context).colorScheme.surfaceContainer,
-                  Theme.of(context).colorScheme.surface,
                   Theme.of(context).colorScheme.surface,
                   Theme.of(context).colorScheme.surface,
                   Theme.of(context).colorScheme.surfaceContainerLowest,

@@ -27,10 +27,16 @@ class UserApiService extends ChangeNotifier {
       if (response.statusCode! >= 400) {
         final errorData = response.data;
         final errorMessage = errorData['message'] ?? 'Erro desconhecido';
-        return Result.failure(errorMessage);
+        return Result.failure(
+          errorMessage is List
+              ? errorMessage.join(', ')
+              : errorMessage.toString(),
+        );
       }
       final userDto = AuthenticatedUserMapper.toDto(response.data);
       return Result.success(userDto);
+    } on TimeoutException {
+      return Result.failure('Timeout');
     } catch (error) {
       return Result.failure(_errorMessage(error));
     }

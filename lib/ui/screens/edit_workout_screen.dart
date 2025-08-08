@@ -33,22 +33,6 @@ class EditWorkoutScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  ...workout.exercises.map(
-                    (e) => ClipOval(
-                      child: Image.asset(
-                        e.imagePath,
-                        scale: 3.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
             Expanded(
               child: ExercisesList(
                 exercises: workout.exercises,

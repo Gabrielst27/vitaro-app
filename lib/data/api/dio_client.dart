@@ -1,19 +1,19 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:vitaro_app/main.dart';
 
 class DioClient {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final Dio _dio = Dio();
+  final SupabaseClient _user = supabase;
 
   DioClient() {
     _dio.options.validateStatus = (status) => status != null;
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final currentUser = _firebaseAuth.currentUser;
-          final token = currentUser == null
+        onRequest: (options, handler) {
+          final token = _user.auth.currentUser == null
               ? ''
-              : await currentUser.getIdToken();
+              : _user.auth.currentSession!.accessToken;
           options.headers['Authorization'] = 'Bearer $token';
           return handler.next(options);
         },

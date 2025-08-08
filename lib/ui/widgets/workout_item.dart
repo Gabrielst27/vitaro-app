@@ -39,7 +39,7 @@ class _WorkoutItemState extends State<WorkoutItem>
       onTap: _toggleExpanded,
       child: Card(
         color: Theme.of(context).colorScheme.surfaceContainer,
-        margin: EdgeInsets.all(16),
+        margin: EdgeInsets.all(8),
         clipBehavior: Clip.hardEdge,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16),
@@ -98,11 +98,6 @@ class _WorkoutItemState extends State<WorkoutItem>
                         ],
                       ),
                     ),
-                if (widget.workout.exercises.length > 2 && !_isExpanded)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: const Text('Ver mais'),
-                  ),
                 if (_isExpanded)
                   for (int i = 2; i < widget.workout.exercises.length; i++)
                     Container(
@@ -127,13 +122,28 @@ class _WorkoutItemState extends State<WorkoutItem>
                         ],
                       ),
                     ),
+                if (widget.workout.exercises.length > 2)
+                  Container(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerLowest,
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: Row(
+                      spacing: 16,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Text(!_isExpanded ? 'Ver mais' : 'Ver menos')],
+                    ),
+                  ),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Icon(
-                      Icons.delete,
-                      color: Theme.of(context).colorScheme.secondary,
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                     IconButton(
                       onPressed: () {},

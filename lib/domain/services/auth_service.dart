@@ -1,14 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vitaro_app/data/api/auth_api_service.dart';
 import 'package:vitaro_app/data/api/user_api_service.dart';
 import 'package:vitaro_app/domain/models/result_dto.dart';
 import 'package:vitaro_app/domain/models/user_model.dart';
+import 'package:vitaro_app/main.dart';
 
 class AuthService extends ChangeNotifier {
   final AuthApiService _authApi = AuthApiService();
   final UserApiService _userApi = UserApiService();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   User? authUser;
   UserModel? currentUser;
   bool isLoading = true;
@@ -18,14 +18,17 @@ class AuthService extends ChangeNotifier {
   }
 
   _authCheck() {
-    _auth.authStateChanges().listen((User? user) async {
-      authUser = user;
-      if (user != null) {
+    supabase.auth.onAuthStateChange.listen((event) async {
+      final session = event.session;
+      if (session != null) {
+        authUser = session.user;
         try {
           await _findCurrentUser();
         } catch (error) {
-          debugPrint('ERRO ${error.toString()}');
+          print('ERROR $error');
         }
+      } else {
+        authUser = null;
       }
       isLoading = false;
       notifyListeners();
@@ -50,10 +53,7 @@ class AuthService extends ChangeNotifier {
     if (!result.isSuccess) {
       throw Exception(result.errorMessage);
     }
-    final credentials = await _auth.signInWithCustomToken(
-      result.data!.token,
-    );
-    final idToken = await credentials.user!.getIdToken();
+    await _authApi.signIn(user.email, user.password!);
     final model = UserModel(
       id: result.data!.id,
       name: result.data!.name,
@@ -61,15 +61,15 @@ class AuthService extends ChangeNotifier {
       age: result.data!.age,
       height: result.data!.height,
       weight: result.data!.weight,
-      token: idToken,
+      token: result.data!.token,
     );
     currentUser = model;
     notifyListeners();
   }
 
   Future<void> _findCurrentUser() async {
-    if (_auth.currentUser == null) {
-      throw Exception('Usuário não autenticado nessa porra');
+    if (authUser == null) {
+      throw Exception('Usuário não autenticado');
     }
     final result = await _userApi.findCurrentUser();
     if (!result.isSuccess) {
@@ -89,7 +89,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
+    await supabase.auth.signOut();
     currentUser = null;
     notifyListeners();
   }

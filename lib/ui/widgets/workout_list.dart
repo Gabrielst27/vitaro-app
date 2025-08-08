@@ -9,10 +9,13 @@ class WorkoutList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: workouts.length,
-      itemBuilder: (context, index) => WorkoutItem(
-        workout: workouts[index],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 32),
+      child: ListView.builder(
+        itemCount: workouts.length,
+        itemBuilder: (context, index) => WorkoutItem(
+          workout: workouts[index],
+        ),
       ),
     );
   }
