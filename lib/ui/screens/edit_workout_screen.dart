@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vitaro_app/domain/models/workouts_model.dart';
-import 'package:vitaro_app/ui/widgets/exercises_list/edit_workout_header.dart';
-import 'package:vitaro_app/ui/widgets/exercises_list/muscle_targets.dart';
-import 'package:vitaro_app/ui/widgets/exercises_list/workout_exercise_item.dart';
+import 'package:vitaro_app/ui/widgets/edit_workout/edit_workout_header.dart';
+import 'package:vitaro_app/ui/widgets/edit_workout/muscle_targets.dart';
+import 'package:vitaro_app/ui/widgets/edit_workout/workout_exercise_item.dart';
 
 class EditWorkoutScreen extends StatelessWidget {
   final WorkoutModel workout;
