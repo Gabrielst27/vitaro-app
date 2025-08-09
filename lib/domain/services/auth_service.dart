@@ -21,6 +21,13 @@ class AuthService extends ChangeNotifier {
     supabase.auth.onAuthStateChange.listen((event) async {
       final session = event.session;
       if (session != null) {
+        if (session.isExpired) {
+          try {
+            await supabase.auth.refreshSession();
+          } catch (error) {
+            authUser = null;
+          }
+        }
         authUser = session.user;
         try {
           await _findCurrentUser();

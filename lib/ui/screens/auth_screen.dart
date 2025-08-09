@@ -48,7 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               Expanded(
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 800),
                   curve: Curves.easeInOut,
                   margin: EdgeInsets.only(top: _isLogin ? 0 : 48),
                   child: Card(
